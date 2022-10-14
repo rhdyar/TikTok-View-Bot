@@ -7,11 +7,11 @@
 @time: 2024/07/29
 """
 
+
+
 import requests, time, json, urllib.parse, random, threading
 
-VIDEO = ""
-IID = ""
-DID = ""
+VIDEO = "6971411808754208002" #Change Your Video ID#
 
 def view(video):
     try:
@@ -30,8 +30,8 @@ def view(video):
         params = urllib.parse.urlencode(
             {
                 "app_language": "fr",
-                "iid": IID,
-                "device_id": DID,
+                "iid": random.randint(7140000000000000000, 7149999999999999999),
+                "device_id": random.randint(7130000000000000000, 7139999999999999999),
                 "channel": "googleplay",
                 "device_type": device,
                 "ac": "wifi",
@@ -55,12 +55,17 @@ def view(video):
                     + params
             ),
             data = (
-                f'&manifest_version_code={version}'
-                    + f'&update_version_code={version}0'
+                f'&item_id={video}'
+                    + '&sync_origin=false'
+                    + f'&&first_install_time={str(int(time.time()))}'
+                    #+ f'&pre_item_playtime={random.randint(730000, 739999)}'
+                    #+ '&pre_item_id=6971720674050198786'
+                    + 'pre_hot_sentence='
                     + '&play_delta=1'
-                    + f'&item_id={video}'
-                    + f'&version_code={version}'
+                    + f'&action_time={str(int(time.time()))}'
                     + '&aweme_type=0'
+                    + '&tab_type=0'
+                    + 'follow_status=0'
             ), 
             headers = {
                 "host": host,
@@ -76,16 +81,18 @@ def view(video):
             # }
         )
 
-        print(response.json())
+        
+        if 'log_pb' in response.json():
+            print(response.json()['log_pb'])
+            return response
     except Exception as e:
         pass
 
 while True:
-    if threading.active_count() < 10: # don't put too high lmao I warned you
+    if threading.active_count(): # don't put too high lmao I warned you
         threading.Thread(
             target = view, 
             args = [
                 VIDEO
             ]
         ).start()
-      
